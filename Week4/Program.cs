@@ -2,6 +2,78 @@
 {
     internal class Program
     {
+        class Book
+        {
+            protected int current_page = 0, total_pages = 0;
+            protected string title = "Unknown";
+            public Book() { }
+            public Book(int currentpage, int total_pages, string title)
+            {
+                this.current_page = currentpage;
+                this.total_pages = total_pages;
+                this.title = title;
+            }
+            public int GetCurrentPage() { return current_page; }
+            public void SetCurrentPage(int currentpage) { this.current_page = currentpage; }
+            public int GetTotalPages() { return total_pages; }
+            public void SetTotalPages(int total_pages) { this.total_pages = total_pages; }
+            public string GetTitle() { return title; }
+            public void SetTitle(string title) { this.title = title; }
+            public override string ToString()
+            {
+                return $"The book title is -{title}- and it has {total_pages} pages.\n" +
+                    $"You're on the {current_page} page. Enjoy :)";
+            }
+            public virtual int TurnPage(int number)
+            {
+                current_page += number;
+                Console.WriteLine("You are reading and turning pages.\nNow you're on the " +  current_page + " page.");
+                return current_page;
+            }
+        }
+        class PaperBook : Book
+        {
+            bool softCover = false;
+            public PaperBook() { }
+            public PaperBook(bool softCover, int currentpage, int total_pages, string title) : base(currentpage, total_pages, title)
+            {
+                this.softCover = softCover; 
+            }
+            public bool GetSoftCover() {  return softCover; }
+            public void SetSoftCover(bool softCover) { this.softCover = softCover; }
+            public override string ToString()
+            {   
+                return $"{base.ToString()}\nIs the book cover Soft? Answer: {softCover}.";
+            }
+            public override int TurnPage(int number)
+            {
+                current_page += number;
+                Console.WriteLine("\nThe pages of the book rustle quietly under your fingers.\n" +
+                    "Now you're on the " + current_page + " page.");
+                return current_page;
+            }
+        }
+        class DigitalBook : Book
+        {
+            protected double file_size;
+            public DigitalBook() { }
+            public DigitalBook(double file_size, int currentpage, int total_pages, string title) : base(currentpage, total_pages, title)
+            {
+                this.file_size = file_size;
+            }
+            public double GetFileSize() { return file_size; }
+            public void SetFileSize(double file_size) { this.file_size = file_size; }
+            public override string ToString()
+            {
+                return $"{base.ToString()}\nOh, and the file_size is: {file_size}.";
+            }
+            public override int TurnPage(int number)
+            {
+                current_page += number;
+                Console.WriteLine("\nTime flies while you read and you are already on the " + current_page + " page.");
+                return current_page;
+            }
+        }
         class Pet
         {
             protected double weight = 0; // Default is 0.0; explicit for clarity.
@@ -165,7 +237,28 @@
             Console.WriteLine("The current weight is " + nemoThePet.GetWeight() + " kg");
             nemoThePet.Eat();
             nemoThePet.ShowJoy();
-            
+
+            /* Ex.3: For the Book, DigitalBook, PaperBook classes you created:
+             * In each of the classes override the method ToString(),
+             * so that it returns a string containing the attributes names and values.
+             * Change the turn_page methods in class Book to virtual.
+             * In some of the derived classes, override the method with a different
+             * implementation which is specific to the derived class.
+             * Call the method on the different objects you created
+             * and print the current page.*/
+            Console.WriteLine("\n\n  - Ex.3 -\n\n");
+
+            Book book = new Book(100, 450, "Harry Potter");
+            PaperBook bookPaper = new PaperBook(true, 10, 600, "Dark Tower");
+            DigitalBook bookDigitalBook = new DigitalBook(124.5, 33, 370, "Gone with the wind");
+            Console.WriteLine(book.ToString());
+            Console.WriteLine($"\n{bookPaper.ToString()}");
+            Console.WriteLine($"\n{bookDigitalBook.ToString()}");
+
+            Console.WriteLine("\n.. Let's read ..\n");
+            book.TurnPage(15);
+            bookPaper.TurnPage(11);
+            bookDigitalBook.TurnPage(30);
         }
     }
 }
