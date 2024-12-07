@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C#_lec5_ex_interfaces", "C#_lec5_ex_interfaces.csproj", "{2999DB72-2A05-4702-A185-11C26591C818}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2999DB72-2A05-4702-A185-11C26591C818}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2999DB72-2A05-4702-A185-11C26591C818}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2999DB72-2A05-4702-A185-11C26591C818}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2999DB72-2A05-4702-A185-11C26591C818}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1B53B57F-FF20-4445-8F67-97EB9B7C8158}
+	EndGlobalSection
+EndGlobal
