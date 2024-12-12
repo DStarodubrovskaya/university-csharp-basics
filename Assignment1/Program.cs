@@ -6,7 +6,7 @@
         {
             protected string title = "Unknown";
             protected string author = "Unknown";
-            protected bool isOnLoan = false;
+            protected bool isOnLoan = true;
             public Book() { } // default constructor
             public Book(string title, string author, bool isOnLoan)
             {
@@ -50,10 +50,7 @@
         {
             protected bool canBeLend = false;
             public ReferenceBook() { } // default constructor
-            public ReferenceBook(string title, string author, bool isOnLoan, bool canBeLend) : base(title, author, isOnLoan)
-            {
-                this.canBeLend = canBeLend;
-            }
+            public ReferenceBook(string title, string author, bool isOnLoan) : base(title, author, isOnLoan) {}
             public bool CanBeLend { get { return canBeLend; } set { canBeLend = value; } }
         }
         class Subscriber
@@ -76,31 +73,32 @@
             Subscriber[] subscribers = new Subscriber[maxLength];
             private int subCount = 0; // tracks the number of subscribers
             public Library() { } // default constructor
-            public bool LookOnTheShelf(Book newBook)
+            public int LookOnTheShelf(string title, string author)
             {
                 for (int i = 0; i < bookCount; i++)
                 {
-                    if ((books[i] == newBook))
+                    if ((books[i].Title == title) && (books[i].Author == author))
                     {
-                        return true; // in case: book found
+                        return i; // in case: book found
                     }
                 }
-                return false; // in case: book not found
+                return -1; // in case: book not found
             }
-            public bool CheckTheList(Subscriber newSub)
+            public int CheckTheList(int id)
             {
                 for (int i = 0; i < subCount; i++)
                 {
-                    if ((subscribers[i].SubscriberId == newSub.SubscriberId))
+                    if ((subscribers[i].SubscriberId == id))
                     {
-                        return true; // in case: subscriber found
+                        return i; // in case: subscriber found
                     }
                 }
-                return false; // in case: subscriber not found
+                return -1; // in case: subscriber not found
             }
-            public void AddBook(Book newBook)
+           
+            public void AddBook(string title, string author, string kind)
             {
-                if (LookOnTheShelf(newBook))
+                if (LookOnTheShelf(title, author) != -1)
                 {
                     Console.WriteLine("This book already exists in the library.");
                 }
@@ -110,9 +108,29 @@
                     {
                         Console.WriteLine("Sorry, the library is full.");
                     }
-                    else
+                    else if (kind.ToLower() == "fiction")
                     {
-                        books[bookCount] = newBook;
+                        Console.WriteLine("What is the genre of this book?");
+                        string genre = Console.ReadLine();
+                        books[bookCount] = new FictionBook(title, author, true, genre);
+                        bookCount++;
+                        Console.WriteLine("Success! New book was added to the library.");
+                    } 
+                    else if (kind.ToLower() == "reference")
+                    {
+                        books[bookCount] = new ReferenceBook(title, author, true);
+                        Console.WriteLine("Is it available for loan? - Y/N?");
+                        string availability = Console.ReadLine();
+
+                        ReferenceBook referenceBook = books[bookCount] as ReferenceBook;
+                        if (referenceBook != null) // Checks if the cast was successful
+                        {
+                            if (availability.ToLower() == "y")
+                            {
+                                referenceBook.CanBeLend = true;
+                            }
+                        }
+
                         bookCount++;
                         Console.WriteLine("Success! New book was added to the library.");
                     }
@@ -120,7 +138,7 @@
             }
             public void AddSubscruber(Subscriber newSub)
             {
-                if (CheckTheList(newSub))
+                if (CheckTheList(newSub.SubscriberId) != -1)
                 {
                     Console.WriteLine("Subscriber exists in the system.");
                 }
@@ -138,8 +156,34 @@
                     }
                 }
             }
+            public void LoanBook(int id, string title, string author)
+            {
+                int subPlace = CheckTheList(id);
+                int bookPlace = LookOnTheShelf(title, author);
+                if (bookPlace == -1)
+                {
+                    Console.WriteLine("Sorry, this subscriber does not exist.\nWould you like to create an account?");
+                }
+                else if (subPlace == -1)
+                {
+                    Console.WriteLine("Sorry, this book does not exist in the library.");
+                }
+                else if ((!books[bookPlace].IsOnLoan) ||
+                    ((books[bookPlace] is ReferenceBook referenceBook) && (!referenceBook.CanBeLend)))
+                {
+                    Console.WriteLine("Sorry, book is unavailable for loan.");
+                }
+                else if (subscribers[subPlace].BooksOnLoan >= 3)
+                {
+                    Console.WriteLine("This subscriber has maximum number of allowed books on loan.");
+                }
+                else
+                {
+                    Console.WriteLine("Success!!!");
+                }
+                    
+            }
         }
-
 
         static void Main(string[] args)
         {
